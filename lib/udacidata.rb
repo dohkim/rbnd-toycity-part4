@@ -67,8 +67,50 @@ class Udacidata
     end
   end
   
-  
-  def self.method_missing(method_name, *arguments, &block)
+  def self.where(hashes = {})
+    lists=self.all
+    hashes.each do |k,v|
+      lists.select! do |list|
+        value = list.send "#{k}"
+        value == v
+      end
+    end
+    lists
   end
   
+  def update(hashes = {})
+    new_lists=[]
+    hashes.each do |k,v|
+      accessor = %Q{
+        def #{k}=(parameter)
+          @#{k}= parameter
+        end}
+      self.class.class_eval(accessor)
+      self.send("#{k}=", v)
+    end
+    
+    CSV.foreach($data_path).with_index do |row, index|
+      if index==self.id
+        new_lists << [self.id, self.brand, self.name, self.price]
+      else
+        new_lists << row
+      end
+    end
+    
+    CSV.open($data_path, 'w') do |csv|
+      new_lists.each do |list|
+        csv << list
+      end
+    end
+    self
+  end
+  
+  def self.method_missing(method_name, *arguments, &block)
+    class_instance=self.all.first
+    attributes=class_instance.instance_variables
+    create_finder_methods(*attributes)
+    self.send "#{method_name}", *arguments
+  end
 end
+
+
