@@ -10,7 +10,7 @@ class Udacidata
   def self.create(opts={})
     new_record = self.new(opts)
     new_record.save
-    p new_record
+    new_record
   end
   
   def save
@@ -24,32 +24,31 @@ class Udacidata
     CSV.read($data_path).drop(1).each do |row|
       list << self.new(id: row[0], brand: row[1], name: row[2], price: row[3])
     end
-    p list
+    list
   end
   
   def self.first(n=1)
     list=self.all
-    p list.first(n)
     if n==1
-      p list.first
+      list.first
     else
-      p list.first(n)
+      list.first(n)
     end
   end
   
   def self.last(n=1)
       list=self.all
     if n==1
-      p list.last
+      list.last
     else
-      p list.last(n)
+      list.last(n)
     end
   end
   
   def self.find(n)
     list=self.all
     if list[n-1]
-      p list[n-1]
+      list[n-1]
     else
       raise ProductNotFoundError, "#{self} ID : #{n} can't be found"
     end
@@ -60,7 +59,7 @@ class Udacidata
   def self.destroy(n)
     remove_product=self.find(n)
     self.remove_product_in_db(n)
-    p remove_product
+    remove_product
   end
   
   def self.remove_product_in_db(n)

@@ -6,7 +6,7 @@ module Analyzable
     
     def print_report(lists)
         report=[]
-        report << "#=> Average Price: $#{average_price(lists)}"
+        report <<"#=> Average Price: $#{average_price(lists)}"
         report << "Inventory by Brand:"
         count_by_brand(lists).each do |k, v|
             report << " - #{k}: #{v}"
@@ -15,8 +15,7 @@ module Analyzable
         count_by_name(lists).each do |k, v|
             report << " - #{k}: #{v}"
         end
-        puts report
-        return report.to_s
+        return report.join("\n").to_s
     end
     
     def self.method_missing(method_name, *arguments, &block)
