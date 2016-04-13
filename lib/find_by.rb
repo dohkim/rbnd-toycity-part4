@@ -1,7 +1,6 @@
 class Module
   def create_finder_methods(*attributes)
     attributes.each do |attribute|
-      attribute = attribute.to_s.delete("@")
       find_by_method= %Q{
         def find_by_#{attribute} (parameter)
           lists=self.all

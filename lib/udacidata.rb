@@ -48,7 +48,13 @@ class Udacidata
   
   def self.find(n)
     list=self.all
-    p list[n-1]
+    if list[n-1]
+      p list[n-1]
+    else
+      raise ProductNotFoundError, "#{self} ID : #{n} can't be found"
+    end
+      
+    #raise ProductNotFoundError, "#{self} ID : #{n} can't be found" unless p list[n-1]
   end
   
   def self.destroy(n)
@@ -106,8 +112,7 @@ class Udacidata
   end
   
   def self.method_missing(method_name, *arguments, &block)
-    class_instance=self.all.first
-    attributes=class_instance.instance_variables
+    attributes = self::ATTRIBUTES
     create_finder_methods(*attributes)
     self.send "#{method_name}", *arguments
   end
